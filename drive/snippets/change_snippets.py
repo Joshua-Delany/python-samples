@@ -19,17 +19,17 @@ from googleapiclient.errors import HttpError
 import google.auth
 
 
+# [START drive_fetch_start_page_token]
 def fetch_start_page_token(drive_service):
-    # [START fetchStartPageToken]
     response = drive_service.changes().getStartPageToken().execute()
     print
     'Start token: %s' % response.get('startPageToken')
-    # [END fetchStartPageToken]
     return response.get('startPageToken')
+# [END drive_fetch_start_page_token]
 
 
+# [START drive_fetch_changes]
 def fetch_changes(drive_service, saved_start_page_token):
-    # [START fetchChanges]
     # Begin with our last saved start token for this user or the
     # current token from getStartPageToken()
     page_token = saved_start_page_token
@@ -44,8 +44,8 @@ def fetch_changes(drive_service, saved_start_page_token):
             # Last page, save this token for the next polling interval
             saved_start_page_token = response.get('newStartPageToken')
         page_token = response.get('nextPageToken')
-    # [END fetchChanges]
     return saved_start_page_token
+# [END drive_fetch_changes]
 
 
 def main():
