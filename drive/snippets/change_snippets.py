@@ -21,7 +21,16 @@ import google.auth
 
 # [START drive_fetch_start_page_token]
 def fetch_start_page_token(drive_service):
+    """Fetches a page token
+
+    Args:
+        drive_service: A drive v3 API client
+
+    Returns:
+        A page token
+    """
     try:
+        # Build and execute request to fetch start page token
         response = drive_service.changes().getStartPageToken().execute()
         print('Start token: {token}'.format(
             token=response.get('startPageToken')))
@@ -35,11 +44,21 @@ def fetch_start_page_token(drive_service):
 
 # [START drive_fetch_changes]
 def fetch_changes(drive_service, saved_start_page_token):
+    """Fetches changes since passed page token was created
+
+    Args:
+        drive_service: A drive v3 API client
+        saved_start_page_token: A page token
+
+    Returns:
+        A new page token
+    """
     try:
         # Begin with our last saved start token for this user or the
         # current token from getStartPageToken()
         page_token = saved_start_page_token
         while page_token is not None:
+            # Build and execute request to fetch changes
             response = drive_service.changes().list(pageToken=page_token,
                                                     spaces='drive').execute()
             for change in response.get('changes'):
@@ -89,5 +108,5 @@ def main():
         raise
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     main()
