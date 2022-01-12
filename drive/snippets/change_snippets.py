@@ -21,30 +21,40 @@ import google.auth
 
 # [START drive_fetch_start_page_token]
 def fetch_start_page_token(drive_service):
-    response = drive_service.changes().getStartPageToken().execute()
-    print
-    'Start token: %s' % response.get('startPageToken')
-    return response.get('startPageToken')
+    try:
+        response = drive_service.changes().getStartPageToken().execute()
+        print
+        'Start token: %s' % response.get('startPageToken')
+        return response.get('startPageToken')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_fetch_start_page_token]
 
 
 # [START drive_fetch_changes]
 def fetch_changes(drive_service, saved_start_page_token):
-    # Begin with our last saved start token for this user or the
-    # current token from getStartPageToken()
-    page_token = saved_start_page_token
-    while page_token is not None:
-        response = drive_service.changes().list(pageToken=page_token,
-                                                spaces='drive').execute()
-        for change in response.get('changes'):
-            # Process change
-            print
-            'Change found for file: %s' % change.get('fileId')
-        if 'newStartPageToken' in response:
-            # Last page, save this token for the next polling interval
-            saved_start_page_token = response.get('newStartPageToken')
-        page_token = response.get('nextPageToken')
-    return saved_start_page_token
+    try:
+        # Begin with our last saved start token for this user or the
+        # current token from getStartPageToken()
+        page_token = saved_start_page_token
+        while page_token is not None:
+            response = drive_service.changes().list(pageToken=page_token,
+                                                    spaces='drive').execute()
+            for change in response.get('changes'):
+                # Process change
+                print
+                'Change found for file: %s' % change.get('fileId')
+            if 'newStartPageToken' in response:
+                # Last page, save this token for the next polling interval
+                saved_start_page_token = response.get('newStartPageToken')
+            page_token = response.get('nextPageToken')
+        return saved_start_page_token
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_fetch_changes]
 
 
