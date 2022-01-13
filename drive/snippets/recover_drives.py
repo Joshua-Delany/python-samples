@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_recover_drives]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -28,7 +29,6 @@ def recover_drives():
     try:
         drive_service = build('drive', 'v3', credentials=creds)
         drives = []
-        # [START recoverDrives]
         # Find all shared drives without an organizer and add one.
         # Note: This example does not capture all cases. Shared drives
         # that have an empty group as the sole organizer, or an
@@ -63,12 +63,12 @@ def recover_drives():
             page_token = response.get('nextPageToken', None)
             if page_token is None:
                 break
-        # [END recoverDrives]
         return drives
     except HttpError as err:
             # TODO(developer) - handle error appropriately
             print('An error occurred: {error}'.format(error=err))
             raise
+# [END drive_recover_drives]
 
 
 if __name__ == '__main__':

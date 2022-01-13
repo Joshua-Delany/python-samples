@@ -14,11 +14,13 @@
 
 from __future__ import print_function
 
+# [START drive_create_drive]
 import uuid
 
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
+
 
 def create_drive():
     # Load pre-authorized user credentials from the environment.
@@ -28,16 +30,19 @@ def create_drive():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START createDrive]
         drive_metadata = {'name': 'Project Resources'}
         request_id = str(uuid.uuid4())
         drive = drive_service.drives().create(body=drive_metadata,
                                               requestId=request_id,
                                               fields='id').execute()
         print('Drive ID: {drive_id}'.format(drive_id=drive.get('id')))
-        # [END createDrive]
         return drive.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_create_drive]
+
+
+if __name__ == '__main__':
+    create_drive()
