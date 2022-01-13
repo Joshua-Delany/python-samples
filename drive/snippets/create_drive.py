@@ -12,21 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import simplejson
-import io
-import uuid
-from datetime import datetime
-from apiclient import errors
+from __future__ import print_function
 
-def create_drive(self):
-    drive_service = self.service
-    # [START createDrive]
-    drive_metadata = {'name': 'Project Resources'}
-    request_id = str(uuid.uuid4())
-    drive = drive_service.drives().create(body=drive_metadata,
-                                          requestId=request_id,
-                                          fields='id').execute()
-    print
-    'Drive ID: %s' % drive.get('id')
-    # [END createDrive]
-    return drive.get('id')
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+import google.auth
+
+def create_drive():
+    # Load pre-authorized user credentials from the environment.
+    # TODO(developer) - See https://developers.google.com/identity for
+    # guides on implementing OAuth2 for your application.
+    creds, _ = google.auth.default()
+
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        # [START createDrive]
+        drive_metadata = {'name': 'Project Resources'}
+        request_id = str(uuid.uuid4())
+        drive = drive_service.drives().create(body=drive_metadata,
+                                              requestId=request_id,
+                                              fields='id').execute()
+        print
+        'Drive ID: %s' % drive.get('id')
+        # [END createDrive]
+        return drive.get('id')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
