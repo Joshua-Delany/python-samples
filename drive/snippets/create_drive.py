@@ -14,6 +14,8 @@
 
 from __future__ import print_function
 
+import uuid
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -32,8 +34,7 @@ def create_drive():
         drive = drive_service.drives().create(body=drive_metadata,
                                               requestId=request_id,
                                               fields='id').execute()
-        print
-        'Drive ID: %s' % drive.get('id')
+        print('Drive ID: {drive_id}'.format(drive_id=drive.get('id')))
         # [END createDrive]
         return drive.get('id')
     except HttpError as err:

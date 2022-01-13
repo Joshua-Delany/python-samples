@@ -42,9 +42,6 @@ def recover_drives():
             'role': 'organizer',
             'emailAddress': 'user@example.com'
         }
-        # [START_EXCLUDE silent]
-        new_organizer_permission['emailAddress'] = real_user
-        # [END_EXCLUDE]
         while True:
             response = drive_service.drives().list(
                 q='organizerCount = 0',
@@ -52,20 +49,17 @@ def recover_drives():
                 useDomainAdminAccess=True,
                 pageToken=page_token).execute()
             for drive in response.get('drives', []):
-                print
-                'Found shared drive without organizer: %s (%s)' % (
-                    drive.get('title'), drive.get('id'))
+                print('Found shared drive without organizer: '
+                      '{drive_title} ({drive_id})'.format(
+                        drive.get('title'), drive.get('id')))
                 permission = drive_service.permissions().create(
                     fileId=drive.get('id'),
                     body=new_organizer_permission,
                     useDomainAdminAccess=True,
                     supportsAllDrives=True,
                     fields='id').execute()
-                print
-                'Added organizer permission: %s ' % (permission.get('id'))
-            # [START_EXCLUDE silent]
-            drives.extend(response.get('drives', []))
-            # [END_EXCLUDE]
+                print('Added organizer permission: {permissions_id}'.format(
+                    permissions_id=(permission.get('id'))))
             page_token = response.get('nextPageToken', None)
             if page_token is None:
                 break
