@@ -56,5 +56,6 @@ def upload_app_data():
         raise
 # [END drive_upload_app_data]
 
+
 if __name__ == '__main__':
     upload_app_data()
