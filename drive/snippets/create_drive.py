@@ -15,11 +15,17 @@
 from __future__ import print_function
 
 # [START drive_create_drive]
+import os.path
 import uuid
 
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import google.auth
+
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/drive']
 
 
 def create_drive():
@@ -28,10 +34,23 @@ def create_drive():
     Returns:
         The id of the newly created shared drive in dictionary format.
     """
-    # Load pre-authorized user credentials from the environment.
-    # TODO(developer) - See https://developers.google.com/identity for
-    # guides on implementing OAuth2 for your application.
-    creds, _ = google.auth.default()
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
 
     try:
         # Create the drive v3 API client
