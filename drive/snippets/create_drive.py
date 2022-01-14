@@ -23,18 +23,27 @@ import google.auth
 
 
 def create_drive():
+    """Creates a new shared drive
+
+    Returns:
+        The id of the newly created shared drive in dictionary format.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
+
+        # Build and execute request to create a new shared drive
         drive_metadata = {'name': 'Project Resources'}
         request_id = str(uuid.uuid4())
         drive = drive_service.drives().create(body=drive_metadata,
                                               requestId=request_id,
                                               fields='id').execute()
+
         print('Drive ID: {drive_id}'.format(drive_id=drive.get('id')))
         return drive.get('id')
     except HttpError as err:

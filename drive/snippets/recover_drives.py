@@ -21,14 +21,21 @@ import google.auth
 
 
 def recover_drives():
+    """Adds an organizer to drives that currently have no organizer
+
+    Returns:
+        A list of drives that had a new organizer added
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
         drives = []
+
         # Find all shared drives without an organizer and add one.
         # Note: This example does not capture all cases. Shared drives
         # that have an empty group as the sole organizer, or an
@@ -42,16 +49,21 @@ def recover_drives():
             'role': 'organizer',
             'emailAddress': 'user@example.com'
         }
+
         while True:
+            # Build and execute request to fetch all drives without an organizer
             response = drive_service.drives().list(
                 q='organizerCount = 0',
                 fields='nextPageToken, drives(id, name)',
                 useDomainAdminAccess=True,
                 pageToken=page_token).execute()
+
+            # Add a new organizer to fetched drives
             for drive in response.get('drives', []):
                 print('Found shared drive without organizer: '
                       '{drive_title} ({drive_id})'.format(
-                        drive.get('title'), drive.get('id')))
+                        drive_title=drive.get('title'),
+                        drive_id=drive.get('id')))
                 permission = drive_service.permissions().create(
                     fileId=drive.get('id'),
                     body=new_organizer_permission,
@@ -60,6 +72,8 @@ def recover_drives():
                     fields='id').execute()
                 print('Added organizer permission: {permissions_id}'.format(
                     permissions_id=(permission.get('id'))))
+
+            drives.extend(response.get('drives', []))
             page_token = response.get('nextPageToken', None)
             if page_token is None:
                 break
