@@ -21,13 +21,21 @@ import google.auth
 
 
 def touch_file():
+    """Updates a file's metadata
+
+    Returns:
+        The time of file modification.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
+
+        # Create updated metadata
         file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
         file_metadata = {
             'modifiedTime': datetime.utcnow().isoformat() + 'Z'
@@ -36,6 +44,7 @@ def touch_file():
         file_id = real_file_id
         file_metadata['modifiedTime'] = real_timestamp
         # [END_EXCLUDE]
+        # Modify file's metadata
         file = drive_service.files().update(fileId=file_id,
                                             body=file_metadata,
                                             fields='id, modifiedTime').execute()

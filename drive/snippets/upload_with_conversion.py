@@ -22,13 +22,21 @@ import google.auth
 
 
 def upload_with_conversion():
+    """Uploads a file to the drive space and converts to a workspace filetype.
+
+    Returns:
+        Uploaded file's id.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create a drive service object for interacting with the v3 drive api
         drive_service = build('drive', 'v3', credentials=creds)
+
+        # Create metadata for a sheets file and file upload object for .csv file
         file_metadata = {
             'name': 'My Report',
             'mimeType': 'application/vnd.google-apps.spreadsheet'
@@ -36,6 +44,9 @@ def upload_with_conversion():
         media = MediaFileUpload('files/report.csv',
                                 mimetype='text/csv',
                                 resumable=True)
+
+        # Build and execute request to upload the .csv file with Google sheets
+        # mimeType to convert on upload
         file = drive_service.files().create(body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()

@@ -21,23 +21,33 @@ import google.auth
 
 
 def move_file_to_folder():
+    """Moves a file into a folder
+
+    Returns:
+        The id of the file's new parent folder
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
+    file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
+    folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
+
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
-        file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
-        folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
+
         # [START_EXCLUDE silent]
         file_id = real_file_id
         folder_id = real_folder_id
         # [END_EXCLUDE]
+
         # Retrieve the existing parents to remove
         file = drive_service.files().get(fileId=file_id,
                                          fields='parents').execute()
         previous_parents = ",".join(file.get('parents'))
+
         # Move the file to the new folder
         file = drive_service.files().update(fileId=file_id,
                                             addParents=folder_id,
