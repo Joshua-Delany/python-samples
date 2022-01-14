@@ -22,13 +22,21 @@ import google.auth
 
 
 def upload_app_data(self):
+    """Retrieves and prints the name and id of each file in the app data folder.
+
+    Returns:
+        The id and name of each found file in dictionary format.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
+
+        # Build and execute request to upload a file to the appData folder
         file_metadata = {
             'name': 'config.json',
             'parents': ['appDataFolder']
@@ -39,6 +47,7 @@ def upload_app_data(self):
         file = drive_service.files().create(body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()
+
         print('File ID: {file_id}'.format(file_id=file.get('id')))
         return file.get('id')
     except HttpError as err:

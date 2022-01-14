@@ -20,16 +20,26 @@ from googleapiclient.errors import HttpError
 import google.auth
 
 def list_app_data(self):
+    """Retrieves and prints the name and id of 10 files in the app data folder.
+
+    Returns:
+        The id and name of each found file in dictionary format.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
-        response = drive_service.files().list(spaces='appDataFolder',
-                                              fields='nextPageToken, files(id, name)',
-                                              pageSize=10).execute()
+
+        # Fetch the id and name fields of 10 files in the appDataFolder space
+        response = drive_service.files().list(
+            spaces='appDataFolder',
+            fields='nextPageToken, files(id, name)',
+            pageSize=10).execute()
+
         for file in response.get('files', []):
             # Process change
             print('Found file: {file_name} ({file_id})'.format(
