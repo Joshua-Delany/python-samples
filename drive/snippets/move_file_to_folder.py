@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_move_file_to_folder]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -27,7 +28,6 @@ def move_file_to_folder():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START moveFileToFolder]
         file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
         folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
         # [START_EXCLUDE silent]
@@ -43,9 +43,9 @@ def move_file_to_folder():
                                             addParents=folder_id,
                                             removeParents=previous_parents,
                                             fields='id, parents').execute()
-        # [END moveFileToFolder]
         return file.get('parents')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_move_file_to_folder]

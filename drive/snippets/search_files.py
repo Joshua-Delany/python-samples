@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_search_files]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -51,3 +52,4 @@ def search_files():
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_search_files]

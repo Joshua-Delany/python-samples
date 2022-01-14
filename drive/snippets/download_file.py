@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_download_file]
 import io
 
 from googleapiclient.discovery import build
@@ -30,7 +31,6 @@ def download_file():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START downloadFile]
         file_id = '0BwwA4oUTeiV1UVNwOHItT0xfa2M'
         # [START_EXCLUDE silent]
         file_id = real_file_id
@@ -43,9 +43,9 @@ def download_file():
             status, done = downloader.next_chunk()
             print
             "Download %d%%." % int(status.progress() * 100)
-        # [END downloadFile]
         return fh.getvalue()
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_download_file]

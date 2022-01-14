@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_upload_with_conversion]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
@@ -28,7 +29,6 @@ def upload_with_conversion():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START uploadWithConversion]
         file_metadata = {
             'name': 'My Report',
             'mimeType': 'application/vnd.google-apps.spreadsheet'
@@ -41,9 +41,9 @@ def upload_with_conversion():
                                             fields='id').execute()
         print
         'File ID: %s' % file.get('id')
-        # [END uploadWithConversion]
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_upload_with_conversion]

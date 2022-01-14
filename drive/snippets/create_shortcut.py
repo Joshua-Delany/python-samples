@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_create_shortcut]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -27,7 +28,6 @@ def create_shortcut():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START createShortcut]
         file_metadata = {
             'name': 'Project plan',
             'mimeType': 'application/vnd.google-apps.drive-sdk'
@@ -36,9 +36,9 @@ def create_shortcut():
                                             fields='id').execute()
         print
         'File ID: %s' % file.get('id')
-        # [END createShortcut]
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+    # [END drive_create_shortcut]

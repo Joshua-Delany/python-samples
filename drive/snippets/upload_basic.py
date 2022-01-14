@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_upload_basic]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
@@ -28,7 +29,6 @@ def upload_basic():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START uploadBasic]
         file_metadata = {'name': 'photo.jpg'}
         media = MediaFileUpload('files/photo.jpg',
                                 mimetype='image/jpeg')
@@ -36,9 +36,9 @@ def upload_basic():
                                             media_body=media,
                                             fields='id').execute()
         print 'File ID: %s' % file.get('id')
-        # [END uploadBasic]
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_upload_basic]

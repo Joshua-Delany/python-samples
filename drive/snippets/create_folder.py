@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_create_folder]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -27,7 +28,6 @@ def create_folder():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START createFolder]
         file_metadata = {
             'name': 'Invoices',
             'mimeType': 'application/vnd.google-apps.folder'
@@ -36,9 +36,9 @@ def create_folder():
                                             fields='id').execute()
         print
         'Folder ID: %s' % file.get('id')
-        # [END createFolder]
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+    # [END drive_create_folder]

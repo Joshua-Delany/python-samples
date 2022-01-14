@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_share_file]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -26,7 +27,6 @@ def share_file():
     creds, _ = google.auth.default()
 
     ids = []
-    # [START shareFile]
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
     # [START_EXCLUDE silent]
     file_id = real_file_id
@@ -74,9 +74,9 @@ def share_file():
             fields='id',
         ))
         batch.execute()
-        # [END shareFile]
         return ids
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_share_file]

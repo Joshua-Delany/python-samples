@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_touch_file]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -27,7 +28,6 @@ def touch_file():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START touchFile]
         file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
         file_metadata = {
             'modifiedTime': datetime.utcnow().isoformat() + 'Z'
@@ -41,9 +41,9 @@ def touch_file():
                                             fields='id, modifiedTime').execute()
         print
         'Modified time: %s' % file.get('modifiedTime')
-        # [END touchFile]
         return file.get('modifiedTime')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_touch_file]

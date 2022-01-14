@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_upload_to_folder]
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
@@ -28,7 +29,6 @@ def upload_to_folder():
 
     try:
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START uploadToFolder]
         folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
         # [START_EXCLUDE silent]
         folder_id = real_folder_id
@@ -45,9 +45,9 @@ def upload_to_folder():
                                             fields='id').execute()
         print
         'File ID: %s' % file.get('id')
-        # [END uploadToFolder]
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))
         raise
+# [END drive_upload_to_folder]
