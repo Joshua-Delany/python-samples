@@ -40,10 +40,6 @@ def export_pdf():
         # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
 
-        # [START_EXCLUDE silent]
-        file_id = real_file_id
-        # [END_EXCLUDE]
-
         # Build request to export the file in pdf format
         request = drive_service.files().export_media(fileId=file_id,
                                                      mimeType='application/pdf')
@@ -62,3 +58,7 @@ def export_pdf():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_export_pdf]
+
+
+if __name__ == '__main__':
+    export_pdf()

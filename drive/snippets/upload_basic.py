@@ -53,3 +53,7 @@ def upload_basic():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_basic]
+
+
+if __name__ == '__main__':
+    upload_basic()

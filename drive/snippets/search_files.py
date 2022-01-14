@@ -48,9 +48,7 @@ def search_files():
                 # Process change
                 print('Found file: {file_name} ({file_id})'.format(
                     file_name=file.get('name'), file_id=file.get('id')))
-            # [START_EXCLUDE silent]
             files.extend(response.get('files', []))
-            # [END_EXCLUDE]
 
             # End loop when all files have been retrieved
             page_token = response.get('nextPageToken', None)
@@ -62,3 +60,7 @@ def search_files():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_search_files]
+
+
+if __name__ == '__main__':
+    search_files()

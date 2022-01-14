@@ -37,9 +37,7 @@ def upload_to_folder():
     try:
         # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
-        # [START_EXCLUDE silent]
-        folder_id = real_folder_id
-        # [END_EXCLUDE]
+
         # Build and execute request to upload a file to the folder
         file_metadata = {
             'name': 'photo.jpg',
@@ -59,3 +57,7 @@ def upload_to_folder():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_to_folder]
+
+
+if __name__ == '__main__':
+    upload_to_folder()

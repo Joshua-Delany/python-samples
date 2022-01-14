@@ -57,3 +57,7 @@ def upload_with_conversion():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_with_conversion]
+
+
+if __name__ == '__main__':
+    upload_with_conversion()

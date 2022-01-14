@@ -15,6 +15,8 @@
 from __future__ import print_function
 
 # [START drive_touch_file]
+from datetime import datetime
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
@@ -36,14 +38,11 @@ def touch_file():
         drive_service = build('drive', 'v3', credentials=creds)
 
         # Create updated metadata
-        file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
+        file_id = '15FuNxsaza0mCiyaVPg6f5eExOBS_PlaW'
         file_metadata = {
             'modifiedTime': datetime.utcnow().isoformat() + 'Z'
         }
-        # [START_EXCLUDE silent]
-        file_id = real_file_id
-        file_metadata['modifiedTime'] = real_timestamp
-        # [END_EXCLUDE]
+
         # Modify file's metadata
         file = drive_service.files().update(fileId=file_id,
                                             body=file_metadata,
@@ -55,3 +54,7 @@ def touch_file():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_touch_file]
+
+
+if __name__ == '__main__':
+    touch_file()

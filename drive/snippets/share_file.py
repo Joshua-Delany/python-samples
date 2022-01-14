@@ -33,9 +33,7 @@ def share_file():
 
     ids = []
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
-    # [START_EXCLUDE silent]
-    file_id = real_file_id
-    # [END_EXCLUDE]
+
     # Handle responses from individual requests in the batch request
     def callback(request_id, response, exception):
         if exception:
@@ -60,9 +58,6 @@ def share_file():
             'role': 'writer',
             'emailAddress': 'user@example.com'
         }
-        # [START_EXCLUDE silent]
-        user_permission['emailAddress'] = real_user
-        # [END_EXCLUDE]
         batch.add(drive_service.permissions().create(
             fileId=file_id,
             body=user_permission,
@@ -75,9 +70,6 @@ def share_file():
             'role': 'reader',
             'domain': 'example.com'
         }
-        # [START_EXCLUDE silent]
-        domain_permission['domain'] = real_domain
-        # [END_EXCLUDE]
         batch.add(drive_service.permissions().create(
             fileId=file_id,
             body=domain_permission,
@@ -92,3 +84,7 @@ def share_file():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_share_file]
+
+
+if __name__ == '__main__':
+    share_file()

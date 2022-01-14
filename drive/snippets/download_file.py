@@ -40,10 +40,6 @@ def download_file():
         # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
 
-        # [START_EXCLUDE silent]
-        file_id = real_file_id
-        # [END_EXCLUDE]
-
         # Build request to download the file
         request = drive_service.files().get_media(fileId=file_id)
         fh = io.BytesIO()
@@ -61,3 +57,7 @@ def download_file():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_download_file]
+
+
+if __name__ == '__main__':
+    download_file()

@@ -38,11 +38,6 @@ def move_file_to_folder():
         # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
 
-        # [START_EXCLUDE silent]
-        file_id = real_file_id
-        folder_id = real_folder_id
-        # [END_EXCLUDE]
-
         # Retrieve the existing parents to remove
         file = drive_service.files().get(fileId=file_id,
                                          fields='parents').execute()
@@ -59,3 +54,7 @@ def move_file_to_folder():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_move_file_to_folder]
+
+
+if __name__ == '__main__':
+    move_file_to_folder()
