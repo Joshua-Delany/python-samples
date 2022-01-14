@@ -15,6 +15,7 @@
 from __future__ import print_function
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 import google.auth
 
@@ -25,23 +26,28 @@ def upload_to_folder():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v3', credentials=creds)
-    # [START uploadToFolder]
-    folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
-    # [START_EXCLUDE silent]
-    folder_id = real_folder_id
-    # [END_EXCLUDE]
-    file_metadata = {
-        'name': 'photo.jpg',
-        'parents': [folder_id]
-    }
-    media = MediaFileUpload('files/photo.jpg',
-                            mimetype='image/jpeg',
-                            resumable=True)
-    file = drive_service.files().create(body=file_metadata,
-                                        media_body=media,
-                                        fields='id').execute()
-    print
-    'File ID: %s' % file.get('id')
-    # [END uploadToFolder]
-    return file.get('id')
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        # [START uploadToFolder]
+        folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
+        # [START_EXCLUDE silent]
+        folder_id = real_folder_id
+        # [END_EXCLUDE]
+        file_metadata = {
+            'name': 'photo.jpg',
+            'parents': [folder_id]
+        }
+        media = MediaFileUpload('files/photo.jpg',
+                                mimetype='image/jpeg',
+                                resumable=True)
+        file = drive_service.files().create(body=file_metadata,
+                                            media_body=media,
+                                            fields='id').execute()
+        print
+        'File ID: %s' % file.get('id')
+        # [END uploadToFolder]
+        return file.get('id')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise

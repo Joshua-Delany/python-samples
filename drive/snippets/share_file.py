@@ -15,6 +15,7 @@
 from __future__ import print_function
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -24,7 +25,6 @@ def share_file():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v3', credentials=creds)
     ids = []
     # [START shareFile]
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
@@ -44,33 +44,39 @@ def share_file():
             ids.append(response.get('id'))
             # [END_EXCLUDE]
 
-    batch = drive_service.new_batch_http_request(callback=callback)
-    user_permission = {
-        'type': 'user',
-        'role': 'writer',
-        'emailAddress': 'user@example.com'
-    }
-    # [START_EXCLUDE silent]
-    user_permission['emailAddress'] = real_user
-    # [END_EXCLUDE]
-    batch.add(drive_service.permissions().create(
-        fileId=file_id,
-        body=user_permission,
-        fields='id',
-    ))
-    domain_permission = {
-        'type': 'domain',
-        'role': 'reader',
-        'domain': 'example.com'
-    }
-    # [START_EXCLUDE silent]
-    domain_permission['domain'] = real_domain
-    # [END_EXCLUDE]
-    batch.add(drive_service.permissions().create(
-        fileId=file_id,
-        body=domain_permission,
-        fields='id',
-    ))
-    batch.execute()
-    # [END shareFile]
-    return ids
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        batch = drive_service.new_batch_http_request(callback=callback)
+        user_permission = {
+            'type': 'user',
+            'role': 'writer',
+            'emailAddress': 'user@example.com'
+        }
+        # [START_EXCLUDE silent]
+        user_permission['emailAddress'] = real_user
+        # [END_EXCLUDE]
+        batch.add(drive_service.permissions().create(
+            fileId=file_id,
+            body=user_permission,
+            fields='id',
+        ))
+        domain_permission = {
+            'type': 'domain',
+            'role': 'reader',
+            'domain': 'example.com'
+        }
+        # [START_EXCLUDE silent]
+        domain_permission['domain'] = real_domain
+        # [END_EXCLUDE]
+        batch.add(drive_service.permissions().create(
+            fileId=file_id,
+            body=domain_permission,
+            fields='id',
+        ))
+        batch.execute()
+        # [END shareFile]
+        return ids
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise

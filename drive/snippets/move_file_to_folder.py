@@ -15,6 +15,7 @@
 from __future__ import print_function
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -24,22 +25,27 @@ def move_file_to_folder():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v3', credentials=creds)
-    # [START moveFileToFolder]
-    file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
-    folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
-    # [START_EXCLUDE silent]
-    file_id = real_file_id
-    folder_id = real_folder_id
-    # [END_EXCLUDE]
-    # Retrieve the existing parents to remove
-    file = drive_service.files().get(fileId=file_id,
-                                     fields='parents').execute()
-    previous_parents = ",".join(file.get('parents'))
-    # Move the file to the new folder
-    file = drive_service.files().update(fileId=file_id,
-                                        addParents=folder_id,
-                                        removeParents=previous_parents,
-                                        fields='id, parents').execute()
-    # [END moveFileToFolder]
-    return file.get('parents')
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        # [START moveFileToFolder]
+        file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
+        folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
+        # [START_EXCLUDE silent]
+        file_id = real_file_id
+        folder_id = real_folder_id
+        # [END_EXCLUDE]
+        # Retrieve the existing parents to remove
+        file = drive_service.files().get(fileId=file_id,
+                                         fields='parents').execute()
+        previous_parents = ",".join(file.get('parents'))
+        # Move the file to the new folder
+        file = drive_service.files().update(fileId=file_id,
+                                            addParents=folder_id,
+                                            removeParents=previous_parents,
+                                            fields='id, parents').execute()
+        # [END moveFileToFolder]
+        return file.get('parents')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
