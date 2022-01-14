@@ -29,7 +29,6 @@ def search_files():
     try:
         drive_service = build('drive', 'v3', credentials=creds)
         files = []
-        # [START searchFiles]
         page_token = None
         while True:
             response = drive_service.files().list(q="mimeType='image/jpeg'",
@@ -38,15 +37,14 @@ def search_files():
                                                   pageToken=page_token).execute()
             for file in response.get('files', []):
                 # Process change
-                print
-                'Found file: %s (%s)' % (file.get('name'), file.get('id'))
+                print('Found file: {file_name} ({file_id})'.format(
+                    file_name=file.get('name'), file_id=file.get('id')))
             # [START_EXCLUDE silent]
             files.extend(response.get('files', []))
             # [END_EXCLUDE]
             page_token = response.get('nextPageToken', None)
             if page_token is None:
                 break
-        # [END searchFiles]
         return files
     except HttpError as err:
         # TODO(developer) - handle error appropriately

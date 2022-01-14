@@ -42,9 +42,9 @@ def export_pdf():
         done = False
         while done is False:
             status, done = downloader.next_chunk()
-            print
-            "Download %d%%." % int(status.progress() * 100)
-        return fh.getvalue()
+            print('Download {download_percent}%.'.format(
+                download_percent=int(status.progress() * 100)))
+            return fh.getvalue()
     except HttpError as err:
         # TODO(developer) - handle error appropriately
         print('An error occurred: {error}'.format(error=err))

@@ -39,8 +39,7 @@ def upload_with_conversion():
         file = drive_service.files().create(body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()
-        print
-        'File ID: %s' % file.get('id')
+        print('File ID: {file_id}'.format(file_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately

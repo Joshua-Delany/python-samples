@@ -34,8 +34,7 @@ def create_folder():
         }
         file = drive_service.files().create(body=file_metadata,
                                             fields='id').execute()
-        print
-        'Folder ID: %s' % file.get('id')
+        print('Folder ID: {folder_id}'.format(folder_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
         # TODO(developer) - handle error appropriately

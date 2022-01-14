@@ -35,11 +35,9 @@ def share_file():
     def callback(request_id, response, exception):
         if exception:
             # Handle error
-            print
-            exception
+            print('An error occurred: {exception}'.format(exception=exception))
         else:
-            print
-            "Permission Id: %s" % response.get('id')
+            print('Permission Id: {id}'.format(id=response.get('id')))
             # [START_EXCLUDE silent]
             ids.append(response.get('id'))
             # [END_EXCLUDE]
