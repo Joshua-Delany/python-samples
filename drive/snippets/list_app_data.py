@@ -19,11 +19,12 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import google.auth
 
-def list_app_data(self):
+
+def list_app_data():
     """Retrieves and prints the name and id of 10 files in the app data folder.
 
     Returns:
-        The id and name of each found file in dictionary format.
+        List of dictionaries containing the id and name of each found file.
     """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
@@ -50,3 +51,7 @@ def list_app_data(self):
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_list_app_data]
+
+
+if __name__ == '__main__':
+    list_app_data()

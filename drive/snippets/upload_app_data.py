@@ -21,11 +21,11 @@ from googleapiclient.http import MediaFileUpload
 import google.auth
 
 
-def upload_app_data(self):
+def upload_app_data():
     """Retrieves and prints the name and id of each file in the app data folder.
 
     Returns:
-        The id and name of each found file in dictionary format.
+        The id of the uploaded file.
     """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
@@ -55,3 +55,6 @@ def upload_app_data(self):
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_app_data]
+
+if __name__ == '__main__':
+    upload_app_data()
