@@ -51,7 +51,7 @@ def recover_drives():
         }
 
         while True:
-            # Build and execute request to fetch all drives without an organizer
+            # Fetch shared drives with no organizer
             response = drive_service.drives().list(
                 q='organizerCount = 0',
                 fields='nextPageToken, drives(id, name)',
