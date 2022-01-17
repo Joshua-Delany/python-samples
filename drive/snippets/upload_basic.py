@@ -14,14 +14,14 @@
 
 
 def upload_basic():
-        drive_service = self.service
-        # [START uploadBasic]
-        file_metadata = {'name': 'photo.jpg'}
-        media = MediaFileUpload('files/photo.jpg',
-                                mimetype='image/jpeg')
-        file = drive_service.files().create(body=file_metadata,
-                                            media_body=media,
-                                            fields='id').execute()
-        print('File ID: {file_id}'.format(file_id=file.get('id')))
-        # [END uploadBasic]
-        return file.get('id')
+    drive_service = self.service
+    # [START uploadBasic]
+    file_metadata = {'name': 'photo.jpg'}
+    media = MediaFileUpload('files/photo.jpg',
+                            mimetype='image/jpeg')
+    file = drive_service.files().create(body=file_metadata,
+                                        media_body=media,
+                                        fields='id').execute()
+    print('File ID: {file_id}'.format(file_id=file.get('id')))
+    # [END uploadBasic]
+    return file.get('id')
