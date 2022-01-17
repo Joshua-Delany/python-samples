@@ -57,3 +57,7 @@ def upload_to_folder():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_to_folder]
+
+
+if __name__ == '__main__':
+    upload_to_folder()
