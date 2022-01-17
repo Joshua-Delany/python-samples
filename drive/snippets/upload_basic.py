@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_upload_basic]
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 import google.auth
@@ -26,7 +27,6 @@ def upload_basic():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v3', credentials=creds)
-    # [START uploadBasic]
     file_metadata = {'name': 'photo.jpg'}
     media = MediaFileUpload('files/photo.jpg',
                             mimetype='image/jpeg')
@@ -34,5 +34,5 @@ def upload_basic():
                                         media_body=media,
                                         fields='id').execute()
     print('File ID: {file_id}'.format(file_id=file.get('id')))
-    # [END uploadBasic]
     return file.get('id')
+# [END drive_upload_basic]
