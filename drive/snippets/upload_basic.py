@@ -22,19 +22,30 @@ import google.auth
 
 
 def upload_basic():
+    """Uploads a file to the drive space.
+
+    Returns:
+        Uploaded file's id.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
+
+        # Create metadata and file upload object for a photo
         file_metadata = {'name': 'photo.jpg'}
         media = MediaFileUpload('files/photo.jpg',
                                 mimetype='image/jpeg')
+
+        # Build and execute request to upload a file
         file = drive_service.files().create(body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()
+
         print('File ID: {file_id}'.format(file_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
