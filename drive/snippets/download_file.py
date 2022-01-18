@@ -17,9 +17,6 @@ def download_file():
     drive_service = self.service
     # [START downloadFile]
     file_id = '0BwwA4oUTeiV1UVNwOHItT0xfa2M'
-    # [START_EXCLUDE silent]
-    file_id = real_file_id
-    # [END_EXCLUDE]
     request = drive_service.files().get_media(fileId=file_id)
     fh = io.BytesIO()
     downloader = MediaIoBaseDownload(fh, request)
