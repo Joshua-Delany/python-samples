@@ -23,7 +23,6 @@ def touch_file():
     file = drive_service.files().update(fileId=file_id,
                                         body=file_metadata,
                                         fields='id, modifiedTime').execute()
-    print
-    'Modified time: %s' % file.get('modifiedTime')
+    print('Modified time: {time}'.format(time=file.get('modifiedTime')))
     # [END touchFile]
     return file.get('modifiedTime')
