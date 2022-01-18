@@ -50,3 +50,7 @@ def create_shortcut():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_create_shortcut]
+
+
+if __name__ == '__main__':
+    create_shortcut()

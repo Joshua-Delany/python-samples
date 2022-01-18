@@ -57,3 +57,7 @@ def download_file():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_download_file]
+
+
+if __name__ == '__main__':
+    download_file()

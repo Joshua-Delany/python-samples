@@ -58,3 +58,7 @@ def export_pdf():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_export_pdf]
+
+
+if __name__ == '__main__':
+    export_pdf()
