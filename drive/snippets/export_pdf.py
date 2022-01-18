@@ -27,7 +27,7 @@ def export_pdf():
     done = False
     while done is False:
         status, done = downloader.next_chunk()
-        print
-        "Download %d%%." % int(status.progress() * 100)
+        print('Download {download_percent}%.'.format(
+            download_percent=int(status.progress() * 100)))
     # [END exportPdf]
     return fh.getvalue()
