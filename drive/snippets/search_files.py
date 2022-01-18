@@ -21,16 +21,24 @@ import google.auth
 
 
 def search_files():
+    """Retrieves and prints the name and id of each jpeg in the drive space.
+
+    Returns:
+        List of file ids and names in dictionary format.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
+
         files = []
         page_token = None
         while True:
+            # Fetch id and name fields of jpeg files in the drive space
             response = drive_service.files().list(q="mimeType='image/jpeg'",
                                                   spaces='drive',
                                                   fields='nextPageToken, files(id, name)',
@@ -40,6 +48,8 @@ def search_files():
                 print('Found file: {file_name} ({file_id})'.format(
                     file_name=file.get('name'), file_id=file.get('id')))
             files.extend(response.get('files', []))
+
+            # End loop when all files have been retrieved
             page_token = response.get('nextPageToken', None)
             if page_token is None:
                 break

@@ -21,24 +21,36 @@ import google.auth
 
 
 def share_file():
+    """Gives file write and read permissions to a user and domain.
+
+    Returns:
+        The ids for added permissions.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    try:
-        drive_service = build('drive', 'v3', credentials=creds)
-        ids = []
-        file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
-        def callback(request_id, response, exception):
-            if exception:
-                # Handle error
-                print('An error occurred: {exception}'.format(exception=exception))
-            else:
-                print('Permission Id: {id}'.format(id=response.get('id')))
-                ids.append(response.get('id'))
+    ids = []
+    file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
 
+    # Handle responses from individual requests in the batch request
+    def callback(request_id, response, exception):
+        if exception:
+            # Handle error
+            print('An error occurred: {exception}'.format(exception=exception))
+        else:
+            print('Permission Id: {id}'.format(id=response.get('id')))
+            ids.append(response.get('id'))
+
+    try:
+        # Create the drive v3 API client
+        drive_service = build('drive', 'v3', credentials=creds)
+
+        # Create a batch request object
         batch = drive_service.new_batch_http_request(callback=callback)
+
+        # Build request to create user permissions and add to batch request
         user_permission = {
             'type': 'user',
             'role': 'writer',
@@ -49,6 +61,8 @@ def share_file():
             body=user_permission,
             fields='id',
         ))
+
+        # Build request to create domain permissions and add to batch request
         domain_permission = {
             'type': 'domain',
             'role': 'reader',
@@ -59,6 +73,8 @@ def share_file():
             body=domain_permission,
             fields='id',
         ))
+
+        # Execute the batch request to create user and domain permissions.
         batch.execute()
         return ids
     except HttpError as err:
