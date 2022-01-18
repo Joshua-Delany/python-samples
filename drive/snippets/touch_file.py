@@ -54,3 +54,7 @@ def touch_file():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_touch_file]
+
+
+if __name__ == '__main__':
+    touch_file()

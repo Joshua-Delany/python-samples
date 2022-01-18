@@ -54,3 +54,7 @@ def move_file_to_folder():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_move_file_to_folder]
+
+
+if __name__ == '__main__':
+    move_file_to_folder()

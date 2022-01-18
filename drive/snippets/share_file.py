@@ -82,3 +82,7 @@ def share_file():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_share_file]
+
+
+if __name__ == '__main__':
+    share_file()

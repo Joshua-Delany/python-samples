@@ -59,3 +59,7 @@ def search_files():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_search_files]
+
+
+if __name__ == '__main__':
+    search_files()
