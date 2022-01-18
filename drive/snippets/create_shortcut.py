@@ -16,6 +16,7 @@ from __future__ import print_function
 
 # [START drive_create_shortcut]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -25,13 +26,18 @@ def create_shortcut():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v3', credentials=creds)
-    file_metadata = {
-        'name': 'Project plan',
-        'mimeType': 'application/vnd.google-apps.drive-sdk'
-    }
-    file = drive_service.files().create(body=file_metadata,
-                                        fields='id').execute()
-    print('File ID: {file_id}'.format(file_id=file.get('id')))
-    return file.get('id')
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        file_metadata = {
+            'name': 'Project plan',
+            'mimeType': 'application/vnd.google-apps.drive-sdk'
+        }
+        file = drive_service.files().create(body=file_metadata,
+                                            fields='id').execute()
+        print('File ID: {file_id}'.format(file_id=file.get('id')))
+        return file.get('id')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_create_shortcut]
