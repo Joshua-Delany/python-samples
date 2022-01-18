@@ -12,9 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
+import io
+
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseDownload
+import google.auth
+
 
 def export_pdf():
-    drive_service = self.service
+    # Load pre-authorized user credentials from the environment.
+    # TODO(developer) - See https://developers.google.com/identity for
+    # guides on implementing OAuth2 for your application.
+    creds, _ = google.auth.default()
+
+    drive_service = build('drive', 'v3', credentials=creds)
     # [START exportPdf]
     file_id = '1ZdR3L3qP4Bkq8noWLJHSr_iBau0DNT4Kli4SxNc2YEo'
     request = drive_service.files().export_media(fileId=file_id,
