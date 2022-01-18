@@ -21,19 +21,28 @@ import google.auth
 
 
 def create_folder():
+    """Creates a drive folder.
+
+    Returns:
+        The id for the newly created folder.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
+
+        # Build and execute request to create a new folder.
         file_metadata = {
             'name': 'Invoices',
             'mimeType': 'application/vnd.google-apps.folder'
         }
         file = drive_service.files().create(body=file_metadata,
                                             fields='id').execute()
+
         print('Folder ID: {folder_id}'.format(folder_id=file.get('id')))
         return file.get('id')
     except HttpError as err:

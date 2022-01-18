@@ -24,16 +24,27 @@ import google.auth
 
 
 def download_file():
+    """Downloads a file
+
+    Returns:
+        Contents of the downloaded file
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
+    file_id = '0BwwA4oUTeiV1UVNwOHItT0xfa2M'
+
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v3', credentials=creds)
-        file_id = '0BwwA4oUTeiV1UVNwOHItT0xfa2M'
+
+        # Build request to download the file
         request = drive_service.files().get_media(fileId=file_id)
         fh = io.BytesIO()
+
+        # Download file
         downloader = MediaIoBaseDownload(fh, request)
         done = False
         while done is False:
