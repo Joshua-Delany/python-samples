@@ -12,9 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
+from googleapiclient.discovery import build
+import google.auth
+
 
 def move_file_to_folder():
-    drive_service = self.service
+    # Load pre-authorized user credentials from the environment.
+    # TODO(developer) - See https://developers.google.com/identity for
+    # guides on implementing OAuth2 for your application.
+    creds, _ = google.auth.default()
+
+    drive_service = build('drive', 'v3', credentials=creds)
     # [START moveFileToFolder]
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
     folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
