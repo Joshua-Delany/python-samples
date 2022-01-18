@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_download_file]
 import io
 
 from googleapiclient.discovery import build
@@ -28,7 +29,6 @@ def download_file():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v3', credentials=creds)
-    # [START downloadFile]
     file_id = '0BwwA4oUTeiV1UVNwOHItT0xfa2M'
     request = drive_service.files().get_media(fileId=file_id)
     fh = io.BytesIO()
@@ -38,5 +38,5 @@ def download_file():
         status, done = downloader.next_chunk()
         print('Download {download_percent}%.'.format(
             download_percent=int(status.progress() * 100)))
-    # [END downloadFile]
     return fh.getvalue()
+# [END drive_download_file]

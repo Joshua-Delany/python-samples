@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_export_pdf]
 import io
 
 from googleapiclient.discovery import build
@@ -28,7 +29,6 @@ def export_pdf():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v3', credentials=creds)
-    # [START exportPdf]
     file_id = '1ZdR3L3qP4Bkq8noWLJHSr_iBau0DNT4Kli4SxNc2YEo'
     request = drive_service.files().export_media(fileId=file_id,
                                                  mimeType='application/pdf')
@@ -39,5 +39,5 @@ def export_pdf():
         status, done = downloader.next_chunk()
         print('Download {download_percent}%.'.format(
             download_percent=int(status.progress() * 100)))
-    # [END exportPdf]
     return fh.getvalue()
+# [END drive_export_pdf]

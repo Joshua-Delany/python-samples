@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_create_folder]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,7 +26,6 @@ def create_folder():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v3', credentials=creds)
-    # [START createFolder]
     file_metadata = {
         'name': 'Invoices',
         'mimeType': 'application/vnd.google-apps.folder'
@@ -33,5 +33,5 @@ def create_folder():
     file = drive_service.files().create(body=file_metadata,
                                         fields='id').execute()
     print('Folder ID: {folder_id}'.format(folder_id=file.get('id')))
-    # [END createFolder]
     return file.get('id')
+# [END drive_create_folder]

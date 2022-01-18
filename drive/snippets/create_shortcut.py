@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_create_shortcut]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,7 +26,6 @@ def create_shortcut():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v3', credentials=creds)
-    # [START createShortcut]
     file_metadata = {
         'name': 'Project plan',
         'mimeType': 'application/vnd.google-apps.drive-sdk'
@@ -33,5 +33,5 @@ def create_shortcut():
     file = drive_service.files().create(body=file_metadata,
                                         fields='id').execute()
     print('File ID: {file_id}'.format(file_id=file.get('id')))
-    # [END createShortcut]
     return file.get('id')
+# [END drive_create_shortcut]
