@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_move_file_to_folder]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,7 +26,6 @@ def move_file_to_folder():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v3', credentials=creds)
-    # [START moveFileToFolder]
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
     folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
     # Retrieve the existing parents to remove
@@ -37,5 +37,5 @@ def move_file_to_folder():
                                         addParents=folder_id,
                                         removeParents=previous_parents,
                                         fields='id, parents').execute()
-    # [END moveFileToFolder]
     return file.get('parents')
+# [END drive_move_file_to_folder]

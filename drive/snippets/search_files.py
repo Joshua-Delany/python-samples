@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_search_files]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -26,7 +27,6 @@ def search_files():
 
     drive_service = build('drive', 'v3', credentials=creds)
     files = []
-    # [START searchFiles]
     page_token = None
     while True:
         response = drive_service.files().list(q="mimeType='image/jpeg'",
@@ -41,5 +41,5 @@ def search_files():
         page_token = response.get('nextPageToken', None)
         if page_token is None:
             break
-    # [END searchFiles]
     return files
+# [END drive_search_files]

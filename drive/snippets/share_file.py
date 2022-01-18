@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_share_file]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -26,7 +27,6 @@ def share_file():
 
     drive_service = build('drive', 'v3', credentials=creds)
     ids = []
-    # [START shareFile]
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
     def callback(request_id, response, exception):
         if exception:
@@ -58,5 +58,5 @@ def share_file():
         fields='id',
     ))
     batch.execute()
-    # [END shareFile]
     return ids
+# [END drive_share_file]
