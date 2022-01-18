@@ -18,6 +18,7 @@ from __future__ import print_function
 from datetime import datetime
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -27,14 +28,19 @@ def touch_file():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v3', credentials=creds)
-    file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
-    file_metadata = {
-        'modifiedTime': datetime.utcnow().isoformat() + 'Z'
-    }
-    file = drive_service.files().update(fileId=file_id,
-                                        body=file_metadata,
-                                        fields='id, modifiedTime').execute()
-    print('Modified time: {time}'.format(time=file.get('modifiedTime')))
-    return file.get('modifiedTime')
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
+        file_metadata = {
+            'modifiedTime': datetime.utcnow().isoformat() + 'Z'
+        }
+        file = drive_service.files().update(fileId=file_id,
+                                            body=file_metadata,
+                                            fields='id, modifiedTime').execute()
+        print('Modified time: {time}'.format(time=file.get('modifiedTime')))
+        return file.get('modifiedTime')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_touch_file]

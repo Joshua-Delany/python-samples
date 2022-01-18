@@ -16,6 +16,7 @@ from __future__ import print_function
 
 # [START drive_search_files]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -25,21 +26,26 @@ def search_files():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v3', credentials=creds)
-    files = []
-    page_token = None
-    while True:
-        response = drive_service.files().list(q="mimeType='image/jpeg'",
-                                              spaces='drive',
-                                              fields='nextPageToken, files(id, name)',
-                                              pageToken=page_token).execute()
-        for file in response.get('files', []):
-            # Process change
-            print('Found file: {file_name} ({file_id})'.format(
-                file_name=file.get('name'), file_id=file.get('id')))
-        files.extend(response.get('files', []))
-        page_token = response.get('nextPageToken', None)
-        if page_token is None:
-            break
-    return files
+    try:
+        drive_service = build('drive', 'v3', credentials=creds)
+        files = []
+        page_token = None
+        while True:
+            response = drive_service.files().list(q="mimeType='image/jpeg'",
+                                                  spaces='drive',
+                                                  fields='nextPageToken, files(id, name)',
+                                                  pageToken=page_token).execute()
+            for file in response.get('files', []):
+                # Process change
+                print('Found file: {file_name} ({file_id})'.format(
+                    file_name=file.get('name'), file_id=file.get('id')))
+            files.extend(response.get('files', []))
+            page_token = response.get('nextPageToken', None)
+            if page_token is None:
+                break
+        return files
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_search_files]
