@@ -16,6 +16,7 @@ from __future__ import print_function
 
 # [START drive_list_app_data]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -25,13 +26,18 @@ def list_app_data(self):
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v2', credentials=creds)
-    response = drive_service.files().list(spaces='appDataFolder',
-                                          fields='nextPageToken, items(id, title)',
-                                          maxResults=10).execute()
-    for file in response.get('items', []):
-        # Process change
-        print('Found file: {file_name} ({file_id})'.format(
-            file_name=file.get('title'), file_id=file.get('id')))
-    return response.get('items')
+    try:
+        drive_service = build('drive', 'v2', credentials=creds)
+        response = drive_service.files().list(spaces='appDataFolder',
+                                              fields='nextPageToken, items(id, title)',
+                                              maxResults=10).execute()
+        for file in response.get('items', []):
+            # Process change
+            print('Found file: {file_name} ({file_id})'.format(
+                file_name=file.get('title'), file_id=file.get('id')))
+        return response.get('items')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_list_app_data]
