@@ -21,7 +21,7 @@ def list_app_data(self):
                                           maxResults=10).execute()
     for file in response.get('items', []):
         # Process change
-        print
-        'Found file: %s (%s)' % (file.get('title'), file.get('id'))
+        print('Found file: {file_name} ({file_id})'.format(
+            file_name=file.get('title'), file_id=file.get('id')))
     # [END listAppData]
     return response.get('items')
