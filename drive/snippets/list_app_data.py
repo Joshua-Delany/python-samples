@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_list_app_data]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,7 +26,6 @@ def list_app_data(self):
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v2', credentials=creds)
-    # [START listAppData]
     response = drive_service.files().list(spaces='appDataFolder',
                                           fields='nextPageToken, items(id, title)',
                                           maxResults=10).execute()
@@ -33,5 +33,5 @@ def list_app_data(self):
         # Process change
         print('Found file: {file_name} ({file_id})'.format(
             file_name=file.get('title'), file_id=file.get('id')))
-    # [END listAppData]
     return response.get('items')
+# [END drive_list_app_data]
