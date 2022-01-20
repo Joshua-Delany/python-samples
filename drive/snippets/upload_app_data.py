@@ -21,14 +21,22 @@ from googleapiclient.http import MediaFileUpload
 import google.auth
 
 
-def upload_app_data(self):
+def upload_app_data():
+    """Retrieves and prints the name and id of each file in the app data folder.
+
+    Returns:
+        The id of the uploaded file.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v2 API client
         drive_service = build('drive', 'v2', credentials=creds)
+
+        # Build and execute request to upload a file to the appData folder
         file_metadata = {
             'title': 'config.json',
             'parents': [{
@@ -41,6 +49,7 @@ def upload_app_data(self):
         file = drive_service.files().insert(body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()
+
         print('File ID: {file_id}'.format(file_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
@@ -48,3 +57,7 @@ def upload_app_data(self):
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_appData]
+
+
+if __name__ == '__main__':
+    upload_app_data()
