@@ -20,20 +20,24 @@ from googleapiclient.errors import HttpError
 import google.auth
 
 
-def create_folder(self):
+def create_folder():
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v2 API client
         drive_service = build('drive', 'v2', credentials=creds)
+
+        # Build and execute request to create a new folder.
         file_metadata = {
             'title': 'Invoices',
             'mimeType': 'application/vnd.google-apps.folder'
         }
         file = drive_service.files().insert(body=file_metadata,
                                             fields='id').execute()
+
         print('Folder ID: {folder_id}'.format(folder_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
@@ -41,3 +45,7 @@ def create_folder(self):
         print('An error occurred: {error}'.format(error=err))
         raise
 # [START drive_create_folder]
+
+
+if __name__ == '__main__':
+    create_folder()
