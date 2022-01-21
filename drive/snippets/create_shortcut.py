@@ -20,20 +20,29 @@ from googleapiclient.errors import HttpError
 import google.auth
 
 
-def create_shortcut(self):
+def create_shortcut():
+    """Creates a new third-party shortcut
+
+    Returns:
+        The id of the newly created shortcut.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v2 API client
         drive_service = build('drive', 'v2', credentials=creds)
+
+        # Build and execute request to create a new third-party shortcut
         file_metadata = {
             'title': 'Project plan',
             'mimeType': 'application/vnd.google-apps.drive-sdk'
         }
         file = drive_service.files().insert(body=file_metadata,
                                             fields='id').execute()
+
         print('File ID: {file_id}'.format(file_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
@@ -41,3 +50,7 @@ def create_shortcut(self):
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_create_shortcut]
+
+
+if __name__ == '__main__':
+    create_shortcut()
