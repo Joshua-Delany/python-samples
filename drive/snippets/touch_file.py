@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_touch_file]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,7 +26,6 @@ def touch_file():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v2', credentials=creds)
-    # [START touchFile]
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
     file_metadata = {
         'modifiedDate': datetime.utcnow().isoformat() + 'Z'
@@ -36,5 +36,5 @@ def touch_file():
                                         fields='id, modifiedDate').execute()
     print('Modified time: {update_time}'.format(
         update_time=file.get('modifiedDate')))
-    # [END touchFile]
     return file.get('modifiedDate')
+# [END drive_touch_file]
