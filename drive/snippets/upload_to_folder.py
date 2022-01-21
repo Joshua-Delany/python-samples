@@ -22,13 +22,21 @@ import google.auth
 
 
 def upload_to_folder():
+    """Uploads a file to a folder
+
+    Returns:
+        Uploaded file's id.
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v2 API client
         drive_service = build('drive', 'v2', credentials=creds)
+
+        # Build and execute request to upload a file to the folder
         folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
         file_metadata = {
             'title': 'photo.jpg',
@@ -40,6 +48,7 @@ def upload_to_folder():
         file = drive_service.files().insert(body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()
+
         print('File ID: {file_id}'.format(file_id=file.get('id')))
         return file.get('id')
     except HttpError as err:
@@ -47,3 +56,7 @@ def upload_to_folder():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_upload_to_folder]
+
+
+if __name__ == '__main__':
+    upload_to_folder()
