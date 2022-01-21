@@ -30,7 +30,6 @@ def upload_to_folder(self, real_folder_id):
     file = drive_service.files().insert(body=file_metadata,
                                         media_body=media,
                                         fields='id').execute()
-    print
-    'File ID: %s' % file.get('id')
+    print('File ID: {file_id}'.format(file_id=file.get('id')))
     # [END uploadToFolder]
     return file.get('id')

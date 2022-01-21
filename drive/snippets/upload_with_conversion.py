@@ -26,7 +26,6 @@ def upload_with_conversion(self):
     file = drive_service.files().insert(body=file_metadata,
                                         media_body=media,
                                         fields='id').execute()
-    print
-    'File ID: %s' % file.get('id')
+    print('File ID: {file_id}'.format(file_id=file.get('id')))
     # [END uploadWithConversion]
     return file.get('id')
