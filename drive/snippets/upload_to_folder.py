@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
 
-def upload_to_folder(self, real_folder_id):
-    drive_service = self.service
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+import google.auth
+
+
+def upload_to_folder():
+    # Load pre-authorized user credentials from the environment.
+    # TODO(developer) - See https://developers.google.com/identity for
+    # guides on implementing OAuth2 for your application.
+    creds, _ = google.auth.default()
+
+    drive_service = build('drive', 'v2', credentials=creds)
     # [START uploadToFolder]
     folder_id = '0BwwA4oUTeiV1TGRPeTVjaWRDY1E'
-    # [START_EXCLUDE silent]
-    folder_id = real_folder_id
-    # [END_EXCLUDE]
     file_metadata = {
         'title': 'photo.jpg',
         'parents': [{'id': folder_id}]
