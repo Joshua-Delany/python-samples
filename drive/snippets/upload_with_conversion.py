@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_upload_with_conversion]
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 import google.auth
@@ -26,7 +27,6 @@ def upload_with_conversion():
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v2', credentials=creds)
-    # [START uploadWithConversion]
     file_metadata = {
         'title': 'My Report',
         'mimeType': 'application/vnd.google-apps.spreadsheet'
@@ -38,5 +38,5 @@ def upload_with_conversion():
                                         media_body=media,
                                         fields='id').execute()
     print('File ID: {file_id}'.format(file_id=file.get('id')))
-    # [END uploadWithConversion]
     return file.get('id')
+# [END drive_upload_with_conversion]
