@@ -14,7 +14,10 @@
 
 from __future__ import print_function
 
+import io
+
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseDownload
 import google.auth
 
 
