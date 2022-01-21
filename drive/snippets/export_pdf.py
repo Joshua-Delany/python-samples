@@ -24,17 +24,27 @@ import google.auth
 
 
 def export_pdf():
+    """Downloads a workspace file as a pdf
+
+    Returns:
+        Contents of downloaded pdf
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v2 API client
         drive_service = build('drive', 'v2', credentials=creds)
+
+        # Build request to export the file in pdf format
         file_id = '1ZdR3L3qP4Bkq8noWLJHSr_iBau0DNT4Kli4SxNc2YEo'
         request = drive_service.files().export_media(fileId=file_id,
                                                      mimeType='application/pdf')
         fh = io.BytesIO()
+
+        # Download the file
         downloader = MediaIoBaseDownload(fh, request)
         done = False
         while done is False:
@@ -46,3 +56,7 @@ def export_pdf():
         print('An error occurred: {error}'.format(error=err))
         raise
 # [END drive_export_pdf]
+
+
+if __name__ == '__main__':
+    export_pdf()
