@@ -16,6 +16,7 @@ from __future__ import print_function
 
 # [START drive_upload_with_conversion]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 import google.auth
 
@@ -26,17 +27,22 @@ def upload_with_conversion():
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v2', credentials=creds)
-    file_metadata = {
-        'title': 'My Report',
-        'mimeType': 'application/vnd.google-apps.spreadsheet'
-    }
-    media = MediaFileUpload('files/report.csv',
-                            mimetype='text/csv',
-                            resumable=True)
-    file = drive_service.files().insert(body=file_metadata,
-                                        media_body=media,
-                                        fields='id').execute()
-    print('File ID: {file_id}'.format(file_id=file.get('id')))
-    return file.get('id')
+    try:
+        drive_service = build('drive', 'v2', credentials=creds)
+        file_metadata = {
+            'title': 'My Report',
+            'mimeType': 'application/vnd.google-apps.spreadsheet'
+        }
+        media = MediaFileUpload('files/report.csv',
+                                mimetype='text/csv',
+                                resumable=True)
+        file = drive_service.files().insert(body=file_metadata,
+                                            media_body=media,
+                                            fields='id').execute()
+        print('File ID: {file_id}'.format(file_id=file.get('id')))
+        return file.get('id')
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_upload_with_conversion]
