@@ -28,7 +28,7 @@ def touch_file(self, real_file_id, real_timestamp):
                                         body=file_metadata,
                                         setModifiedDate=True,
                                         fields='id, modifiedDate').execute()
-    print
-    'Modified time: %s' % file.get('modifiedDate')
+    print('Modified time: {update_time}'.format(
+        update_time=file.get('modifiedDate')))
     # [END touchFile]
     return file.get('modifiedDate')
