@@ -16,16 +16,16 @@ from __future__ import print_function
 
 # [START drive_share_file]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
-def share_file(self):
+def share_file():
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v2', credentials=creds)
     ids = []
     file_id = '1sTWaJ_j7PkjzaBWtNc3IzovK5hQf21FbOw9yLeeLPNQ'
     def callback(request_id, response, exception):
@@ -36,27 +36,33 @@ def share_file(self):
             print('Permission Id: {id}'.format(id=response.get('id')))
             ids.append(response.get('id'))
 
-    batch = drive_service.new_batch_http_request(callback=callback)
-    user_permission = {
-        'type': 'user',
-        'role': 'writer',
-        'value': 'user@example.com'
-    }
-    batch.add(drive_service.permissions().insert(
-        fileId=file_id,
-        body=user_permission,
-        fields='id',
-    ))
-    domain_permission = {
-        'type': 'domain',
-        'role': 'reader',
-        'value': 'example.com'
-    }
-    batch.add(drive_service.permissions().insert(
-        fileId=file_id,
-        body=domain_permission,
-        fields='id',
-    ))
-    batch.execute()
-    return ids
+    try:
+        drive_service = build('drive', 'v2', credentials=creds)
+        batch = drive_service.new_batch_http_request(callback=callback)
+        user_permission = {
+            'type': 'user',
+            'role': 'writer',
+            'value': 'user@example.com'
+        }
+        batch.add(drive_service.permissions().insert(
+            fileId=file_id,
+            body=user_permission,
+            fields='id',
+        ))
+        domain_permission = {
+            'type': 'domain',
+            'role': 'reader',
+            'value': 'example.com'
+        }
+        batch.add(drive_service.permissions().insert(
+            fileId=file_id,
+            body=domain_permission,
+            fields='id',
+        ))
+        batch.execute()
+        return ids
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_share_file]

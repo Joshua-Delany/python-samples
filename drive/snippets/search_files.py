@@ -16,30 +16,36 @@ from __future__ import print_function
 
 # [START drive_search_files]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
-def search_files(self):
+def search_files():
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v2', credentials=creds)
-    files = []
-    page_token = None
-    while True:
-        response = drive_service.files().list(q="mimeType='image/jpeg'",
-                                              spaces='drive',
-                                              fields='nextPageToken, items(id, title)',
-                                              pageToken=page_token).execute()
-        for file in response.get('items', []):
-            # Process change
-            print('Found file: {file_name} ({file_id})'.format(
-                file_name=file.get('title'), file_id=file.get('id')))
-        files.extend(response.get('items', []))
-        page_token = response.get('nextPageToken', None)
-        if page_token is None:
-            break
-    return files
+    try:
+        drive_service = build('drive', 'v2', credentials=creds)
+        files = []
+        page_token = None
+        while True:
+            response = drive_service.files().list(q="mimeType='image/jpeg'",
+                                                  spaces='drive',
+                                                  fields='nextPageToken, items(id, title)',
+                                                  pageToken=page_token).execute()
+            for file in response.get('items', []):
+                # Process change
+                print('Found file: {file_name} ({file_id})'.format(
+                    file_name=file.get('title'), file_id=file.get('id')))
+            files.extend(response.get('items', []))
+            page_token = response.get('nextPageToken', None)
+            if page_token is None:
+                break
+        return files
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_search_files]
