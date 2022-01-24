@@ -20,16 +20,28 @@ from googleapiclient.errors import HttpError
 import google.auth
 
 
-def fetch_start_page_token(self):
+def fetch_start_page_token():
+    """Fetches a page token
+
+    Args:
+        drive_service: A drive v3 API client
+
+    Returns:
+        A page token
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v2', credentials=creds)
+
+        # Fetch start page token
         response = drive_service.changes().getStartPageToken().execute()
-        print('Start token: {token}'.format(token=response.get('startPageToken')))
+        print('Start token: {token}'.format(
+            token=response.get('startPageToken')))
         return response.get('startPageToken')
     except HttpError as err:
         # TODO(developer) - handle error appropriately

@@ -20,16 +20,25 @@ from googleapiclient.errors import HttpError
 import google.auth
 
 
-def fetch_changes(self, saved_start_page_token):
+def fetch_changes(saved_start_page_token):
+    """Fetches changes made since passed page token was created
+
+    Args:
+        saved_start_page_token: A page token
+
+    Returns:
+        A new page token
+    """
     # Load pre-authorized user credentials from the environment.
     # TODO(developer) - See https://developers.google.com/identity for
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
     try:
+        # Create the drive v3 API client
         drive_service = build('drive', 'v2', credentials=creds)
-        # Begin with our last saved start token for this user or the
-        # current token from getStartPageToken()
+
+        # Check all files in drive space for changes
         page_token = saved_start_page_token
         while page_token is not None:
             response = drive_service.changes().list(pageToken=page_token,
