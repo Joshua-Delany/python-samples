@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_fetch_start_page_token]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,8 +26,7 @@ def fetch_start_page_token(self):
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v2', credentials=creds)
-    # [START fetchStartPageToken]
     response = drive_service.changes().getStartPageToken().execute()
     print('Start token: {token}'.format(token=response.get('startPageToken')))
-    # [END fetchStartPageToken]
     return response.get('startPageToken')
+# [END drive_fetch_start_page_token]

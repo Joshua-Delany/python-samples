@@ -14,6 +14,7 @@
 
 from __future__ import print_function
 
+# [START drive_fetch_changes]
 from googleapiclient.discovery import build
 import google.auth
 
@@ -25,7 +26,6 @@ def fetch_changes(self, saved_start_page_token):
     creds, _ = google.auth.default()
 
     drive_service = build('drive', 'v2', credentials=creds)
-    # [START fetchChanges]
     # Begin with our last saved start token for this user or the
     # current token from getStartPageToken()
     page_token = saved_start_page_token
@@ -40,5 +40,5 @@ def fetch_changes(self, saved_start_page_token):
             # Last page, save this token for the next polling interval
             saved_start_page_token = response.get('newStartPageToken')
         page_token = response.get('nextPageToken')
-    # [END fetchChanges]
     return saved_start_page_token
+# [END drive_fetch_changes]
