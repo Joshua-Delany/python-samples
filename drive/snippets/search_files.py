@@ -27,9 +27,7 @@ def search_files(self):
             # Process change
             print
             'Found file: %s (%s)' % (file.get('title'), file.get('id'))
-        # [START_EXCLUDE silent]
         files.extend(response.get('items', []))
-        # [END_EXCLUDE]
         page_token = response.get('nextPageToken', None)
         if page_token is None:
             break
