@@ -12,9 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
+from googleapiclient.discovery import build
+import google.auth
+
 
 def fetch_changes(self, saved_start_page_token):
-    drive_service = self.service
+    # Load pre-authorized user credentials from the environment.
+    # TODO(developer) - See https://developers.google.com/identity for
+    # guides on implementing OAuth2 for your application.
+    creds, _ = google.auth.default()
+
+    drive_service = build('drive', 'v2', credentials=creds)
     # [START fetchChanges]
     # Begin with our last saved start token for this user or the
     # current token from getStartPageToken()

@@ -12,9 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
+from googleapiclient.discovery import build
+import google.auth
+
 
 def fetch_start_page_token(self):
-    drive_service = self.service
+    # Load pre-authorized user credentials from the environment.
+    # TODO(developer) - See https://developers.google.com/identity for
+    # guides on implementing OAuth2 for your application.
+    creds, _ = google.auth.default()
+
+    drive_service = build('drive', 'v2', credentials=creds)
     # [START fetchStartPageToken]
     response = drive_service.changes().getStartPageToken().execute()
     print('Start token: {token}'.format(token=response.get('startPageToken')))
