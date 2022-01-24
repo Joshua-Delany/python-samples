@@ -21,11 +21,9 @@ def share_file(self):
     def callback(request_id, response, exception):
         if exception:
             # Handle error
-            print
-            exception
+            print(exception)
         else:
-            print
-            "Permission Id: %s" % response.get('id')
+            print('Permission Id: {id}'.format(id=response.get('id')))
             ids.append(response.get('id'))
 
     batch = drive_service.new_batch_http_request(callback=callback)

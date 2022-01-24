@@ -25,8 +25,8 @@ def search_files(self):
                                               pageToken=page_token).execute()
         for file in response.get('items', []):
             # Process change
-            print
-            'Found file: %s (%s)' % (file.get('title'), file.get('id'))
+            print('Found file: {file_name} ({file_id})'.format(
+                file_name=file.get('title'), file_id=file.get('id')))
         files.extend(response.get('items', []))
         page_token = response.get('nextPageToken', None)
         if page_token is None:
