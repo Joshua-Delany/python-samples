@@ -16,6 +16,7 @@ from __future__ import print_function
 
 # [START drive_fetch_changes]
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import google.auth
 
 
@@ -25,20 +26,25 @@ def fetch_changes(self, saved_start_page_token):
     # guides on implementing OAuth2 for your application.
     creds, _ = google.auth.default()
 
-    drive_service = build('drive', 'v2', credentials=creds)
-    # Begin with our last saved start token for this user or the
-    # current token from getStartPageToken()
-    page_token = saved_start_page_token
-    while page_token is not None:
-        response = drive_service.changes().list(pageToken=page_token,
-                                                spaces='drive').execute()
-        for change in response.get('items'):
-            # Process change
-            print('Change found for file: {file_id}'.format(
-                file_id=change.get('fileId')))
-        if 'newStartPageToken' in response:
-            # Last page, save this token for the next polling interval
-            saved_start_page_token = response.get('newStartPageToken')
-        page_token = response.get('nextPageToken')
-    return saved_start_page_token
+    try:
+        drive_service = build('drive', 'v2', credentials=creds)
+        # Begin with our last saved start token for this user or the
+        # current token from getStartPageToken()
+        page_token = saved_start_page_token
+        while page_token is not None:
+            response = drive_service.changes().list(pageToken=page_token,
+                                                    spaces='drive').execute()
+            for change in response.get('items'):
+                # Process change
+                print('Change found for file: {file_id}'.format(
+                    file_id=change.get('fileId')))
+            if 'newStartPageToken' in response:
+                # Last page, save this token for the next polling interval
+                saved_start_page_token = response.get('newStartPageToken')
+            page_token = response.get('nextPageToken')
+        return saved_start_page_token
+    except HttpError as err:
+        # TODO(developer) - handle error appropriately
+        print('An error occurred: {error}'.format(error=err))
+        raise
 # [END drive_fetch_changes]
