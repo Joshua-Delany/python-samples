@@ -22,7 +22,7 @@ import google.auth
 
 
 def upload_app_data():
-    """Retrieves and prints the name and id of each file in the app data folder.
+    """Uploads a file to the app data folder.
 
     Returns:
         The id of the uploaded file.

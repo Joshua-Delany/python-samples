@@ -45,7 +45,6 @@ def list_app_data():
             # Process change
             print('Found file: {file_name} ({file_id})'.format(
                 file_name=file.get('title'), file_id=file.get('id')))
-        print(response.get('items'))
         return response.get('items')
     except HttpError as err:
         # TODO(developer) - handle error appropriately
